@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1>Analysis Results</h1>
+        
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Form Title</th>
+                        <th>Entity</th>
+                        <th>Industry</th>
+                        <th>Complexity Score</th>
+                        <th>Level</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for analysis in analyses %}
+                    <tr>
+                        <td>{{ analysis.form_title or 'Untitled' }}</td>
+                        <td>{{ analysis.entity_name or 'Unknown' }}</td>
+                        <td>{{ analysis.industry_vertical or 'Unknown' }}</td>
+                        <td>{{ analysis.complexity_score or 0 }}</td>
+                        <td>{{ analysis.complexity_level or 'Unknown' }}</td>
+                        <td>{{ analysis.analysis_date or 'Unknown' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        {% if not analyses %}
+        <div class="text-center py-5">
+            <h5>No results found</h5>
+            <p><a href="{{ url_for('main.upload_page') }}">Upload PDFs</a> to get started.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

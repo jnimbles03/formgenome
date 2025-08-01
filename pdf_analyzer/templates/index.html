@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1>PDF Form Complexity Analyzer</h1>
+        <p class="lead">Analyze PDF forms for complexity across industries.</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5>Total Forms</h5>
+                <h2 class="text-primary">{{ analytics.total_forms or 0 }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <a href="{{ url_for('main.upload_page') }}" class="btn btn-primary me-2">Upload URLs</a>
+                <a href="{{ url_for('main.results') }}" class="btn btn-outline-secondary me-2">View Results</a>
+                <a href="{{ url_for('main.admin') }}" class="btn btn-outline-info">Admin</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
