@@ -5,8 +5,7 @@
   "description": "Analyze PDF forms directly from your browser using Form Genome AI",
   "permissions": [
     "activeTab",
-    "storage",
-    "downloads"
+    "storage"
   ],
   "action": {
     "default_popup": "popup/popup.html",
