@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Form Genome PDF Analyzer</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-title">
+        <div class="logo-wrapper">
+          <div class="dna-helix">
+            <div class="dna-rung"></div>
+            <div class="dna-rung"></div>
+            <div class="dna-rung"></div>
+            <div class="dna-rung"></div>
+            <div class="dna-rung"></div>
+            <div class="dna-rung"></div>
+            <div class="dna-rung"></div>
+            <div class="dna-rung"></div>
+            <div class="dna-rung"></div>
+            <div class="dna-rung"></div>
+          </div>
+          <h1>Form Genome</h1>
+        </div>
+        <p class="subtitle">PDF Form Analyzer</p>
+      </div>
+      <div class="header-buttons">
+        <button id="toggleApi" class="btn-dashboard btn-toggle" title="Switch API Endpoint">Cloud</button>
+        <button id="openDashboard" class="btn-dashboard" title="My analysis dashboard">My Dashboard</button>
+        <button id="openTeamDashboard" class="btn-dashboard btn-team" title="Team dashboard">Team</button>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <!-- Update Available Notification -->
+      <div id="updateNotification" class="update-notification hidden">
+        <strong>Update Available!</strong> <a href="#" id="updateLink" target="_blank">Download v<span
+            id="newVersion"></span></a>
+      </div>
+
+      <!-- Local Server Warning -->
+      <div id="localWarning" class="local-warning hidden">
+        Ensure Local Server (port 8080) is Running
+      </div>
+
+      <!-- PDF List Mode (multiple PDFs on page) -->
+      <div id="pdfList" class="pdf-list hidden">
+        <div class="list-header">
+          <div class="list-controls">
+            <label class="checkbox-label">
+              <input type="checkbox" id="selectAll" checked>
+              <span>Select All (<span id="selectedCount">0</span>/<span id="totalCount">0</span>)</span>
+            </label>
+            <div class="secondary-actions">
+              <button id="smartFilter" class="btn-ghost wand" title="Smart filter: deselect guides, disclosures &amp; marketing docs"><span class="wand-star">&#9733;</span> Smart</button>
+              <button id="clearCache" class="btn-ghost" title="Clear cached results">Clear</button>
+              <button id="generateReport" class="btn-ghost" title="Generate report">Report</button>
+              <button id="generateCSV" class="btn-ghost" title="Export CSV">CSV</button>
+            </div>
+          </div>
+          <div id="pdfItems" class="pdf-items"></div>
+        </div>
+      </div>
+
+      <!-- Single PDF Mode (viewing a PDF directly) -->
+      <div id="singlePdf" class="single-pdf hidden glass-panel">
+        <div class="pdf-info">
+          <p class="pdf-title" id="currentPdfTitle">Current PDF</p>
+          <button id="analyzeSingle" class="btn-primary">Analyze This PDF</button>
+        </div>
+      </div>
+
+      <!-- Analysis Status -->
+      <div id="status" class="status hidden glass-panel">
+        <div class="spinner"></div>
+        <p id="statusText">Analyzing PDF...</p>
+      </div>
+
+      <!-- Error Display -->
+      <div id="error" class="error hidden glass-panel">
+        <p id="errorText"></p>
+      </div>
+
+      <!-- Results Display -->
+      <div id="results" class="results hidden glass-panel">
+        <h2 id="formTitle"></h2>
+
+        <div class="stats">
+          <div class="stat-box">
+            <div class="stat-label">Fields</div>
+            <div class="stat-value" id="fieldCount">-</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Pages</div>
+            <div class="stat-value" id="pages">-</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Complexity</div>
+            <div class="stat-value" id="complexity">-</div>
+          </div>
+        </div>
+
+        <div class="details">
+          <div class="detail-row">
+            <span class="detail-label">Entity:</span>
+            <span class="detail-value" id="entity">-</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Action Type:</span>
+            <span class="detail-value" id="actionType">-</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Signatures:</span>
+            <span class="detail-value" id="signatures">-</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Confidence:</span>
+            <span class="detail-value" id="confidence">-</span>
+          </div>
+        </div>
+
+        <div class="badges" id="badges"></div>
+      </div>
+
+      <!-- No PDFs Found -->
+      <div id="noPdf" class="no-pdf glass-panel">
+        <p>No PDFs found on this page</p>
+        <p class="hint">Navigate to a page with PDF links or open a PDF directly</p>
+      </div>
+    </div>
+
+    <div class="footer-actions glass-panel">
+      <div class="batch-status hidden" id="batchStatus">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p id="batchStatusText">Analyzing 0 of 0 PDFs...</p>
+      </div>
+      <button id="deepScan" class="btn-secondary" title="Scan neighboring pages (Next/Prev)"
+        style="flex: 1; border-color: #f59e0b; color: #f59e0b;">Deep Scan</button>
+      <button id="analyzeBatch" class="btn-primary" style="flex: 2;">Analyze Selected</button>
+    </div>
+  </div>
+
+  <script src="../popup.js"></script>
+</body>
+
+</html>

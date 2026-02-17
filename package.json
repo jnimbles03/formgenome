@@ -1,0 +1,29 @@
+{
+  "name": "form-genome-extension",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "webpack --watch --config webpack.config.js --env target=chrome --env mode=development",
+    "build:chrome": "webpack --mode production --config webpack.config.js --env target=chrome --env mode=production",
+    "build:firefox": "webpack --mode production --config webpack.config.js --env target=firefox --env mode=production",
+    "build:all": "npm run build:chrome && npm run build:firefox",
+    "zip:chrome": "npm run build:chrome && cd dist/chrome && zip -r ../../releases/form-genome-chrome.zip .",
+    "zip:firefox": "npm run build:firefox && cd dist/firefox && zip -r ../../releases/form-genome-firefox.zip .",
+    "lint": "eslint src/ --ext .ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist releases"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.287",
+    "copy-webpack-plugin": "^12.0.2",
+    "eslint": "^9.17.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1",
+    "jsdom": "^25.0.1"
+  }
+}

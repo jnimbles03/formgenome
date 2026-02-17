@@ -1,0 +1,21 @@
+{
+  "host_permissions": [
+    "https://form-genome-api-nxqo233ggq-uc.a.run.app/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "form-genome@docusign.com",
+      "strict_min_version": "109.0"
+    }
+  }
+}

@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Genome — AI-Powered PDF Form Analyzer</title>
+  <meta name="description" content="Analyze PDF forms instantly with AI. Detect complexity, field counts, entities, and more — right from your browser.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #1a202c;
+      background: linear-gradient(-45deg, #e0eafc, #cfdef3, #f5f7fa, #c3cfe2);
+      background-size: 400% 400%;
+      animation: gradientBG 20s ease infinite;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    @keyframes gradientBG {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ─── Glass Panel ─── */
+    .glass {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      border-radius: 20px;
+      box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.04),
+        0 2px 4px -1px rgba(0, 0, 0, 0.02),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+
+    /* ─── Layout ─── */
+    .page-wrapper {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section {
+      margin-bottom: 64px;
+    }
+
+    /* ─── DNA Helix ─── */
+    .dna-helix-hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 120px;
+      width: 48px;
+      perspective: 400px;
+      transform-style: preserve-3d;
+      margin: 0 auto 28px;
+    }
+
+    .dna-rung {
+      width: 100%;
+      height: 1.5px;
+      position: relative;
+      background: rgba(99, 102, 241, 0.2);
+      animation: rotateRung 3s linear infinite;
+    }
+
+    .dna-rung::before,
+    .dna-rung::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      border-radius: 50%;
+      backface-visibility: visible;
+    }
+
+    .dna-rung::before {
+      left: -3px;
+      width: 8px;
+      height: 8px;
+      background: #4f46e5;
+      box-shadow: 0 0 8px rgba(79, 70, 229, 0.5), 0 0 20px rgba(79, 70, 229, 0.2);
+    }
+
+    .dna-rung::after {
+      right: -3px;
+      width: 8px;
+      height: 8px;
+      background: #db2777;
+      box-shadow: 0 0 8px rgba(219, 39, 119, 0.5), 0 0 20px rgba(219, 39, 119, 0.2);
+    }
+
+    @keyframes rotateRung {
+      0%   { transform: rotateY(0deg);   opacity: 1; }
+      25%  { transform: rotateY(90deg);  opacity: 1; }
+      50%  { transform: rotateY(180deg); opacity: 0.5; }
+      75%  { transform: rotateY(270deg); opacity: 0.35; }
+      100% { transform: rotateY(360deg); opacity: 1; }
+    }
+
+    .dna-rung:nth-child(1)  { animation-delay: -2.70s; }
+    .dna-rung:nth-child(2)  { animation-delay: -2.40s; }
+    .dna-rung:nth-child(3)  { animation-delay: -2.10s; }
+    .dna-rung:nth-child(4)  { animation-delay: -1.80s; }
+    .dna-rung:nth-child(5)  { animation-delay: -1.50s; }
+    .dna-rung:nth-child(6)  { animation-delay: -1.20s; }
+    .dna-rung:nth-child(7)  { animation-delay: -0.90s; }
+    .dna-rung:nth-child(8)  { animation-delay: -0.60s; }
+    .dna-rung:nth-child(9)  { animation-delay: -0.30s; }
+    .dna-rung:nth-child(10) { animation-delay: 0s; }
+    .dna-rung:nth-child(11) { animation-delay: 0.30s; }
+    .dna-rung:nth-child(12) { animation-delay: 0.60s; }
+
+    /* ─── Hero ─── */
+    .hero {
+      text-align: center;
+      padding: 80px 0 48px;
+      margin-bottom: 0;
+    }
+
+    .hero-title {
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #4f46e5 0%, #312e81 60%, #db2777 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+
+    .hero-tagline {
+      font-size: clamp(16px, 2.5vw, 20px);
+      font-weight: 600;
+      color: #4a5568;
+      margin-bottom: 6px;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(13px, 2vw, 15px);
+      font-weight: 500;
+      color: #718096;
+      margin-bottom: 36px;
+    }
+
+    .hero-subtitle .chrome-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(79, 70, 229, 0.08);
+      padding: 3px 12px 3px 8px;
+      border-radius: 99px;
+      font-weight: 600;
+      color: #4f46e5;
+      border: 1px solid rgba(79, 70, 229, 0.15);
+    }
+
+    .chrome-icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ─── CTA Button ─── */
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      color: #fff;
+      border: none;
+      padding: 16px 36px;
+      border-radius: 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow:
+        0 4px 14px rgba(79, 70, 229, 0.35),
+        0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    .btn-cta:hover {
+      transform: translateY(-3px);
+      box-shadow:
+        0 8px 25px rgba(79, 70, 229, 0.45),
+        0 2px 6px rgba(0, 0, 0, 0.1);
+      background: linear-gradient(135deg, #595cdf 0%, #4338ca 100%);
+    }
+
+    .btn-cta:active {
+      transform: translateY(-1px);
+    }
+
+    .btn-cta svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    /* ─── Transition Banner ─── */
+    .transition-banner {
+      padding: 28px 32px;
+      text-align: center;
+      margin-bottom: 64px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .transition-banner::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, #4f46e5, #db2777);
+      border-radius: 2px;
+    }
+
+    .transition-banner p {
+      font-size: 15px;
+      line-height: 1.7;
+      color: #374151;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .transition-banner strong {
+      color: #312e81;
+      font-weight: 700;
+    }
+
+    /* ─── Section Headings ─── */
+    .section-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 36px;
+      text-align: center;
+    }
+
+    .section-label h2 {
+      font-size: clamp(22px, 3.5vw, 28px);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #1a202c;
+    }
+
+    .section-label .accent-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4f46e5, #db2777);
+      flex-shrink: 0;
+    }
+
+    /* ─── Features Grid ─── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .feature-card {
+      padding: 28px 24px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow:
+        0 12px 24px -4px rgba(0, 0, 0, 0.06),
+        0 4px 8px -2px rgba(0, 0, 0, 0.03);
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 20px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(79, 70, 229, 0.15) 100%);
+      color: #4f46e5;
+      border: 1px solid rgba(99, 102, 241, 0.15);
+    }
+
+    .feature-icon.pink {
+      background: linear-gradient(135deg, rgba(219, 39, 119, 0.08) 0%, rgba(219, 39, 119, 0.14) 100%);
+      color: #db2777;
+      border-color: rgba(219, 39, 119, 0.15);
+    }
+
+    .feature-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 8px;
+      letter-spacing: -0.2px;
+    }
+
+    .feature-card p {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #64748b;
+      font-weight: 450;
+    }
+
+    /* ─── Installation Steps ─── */
+    .steps-container {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .step {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      padding: 20px 0;
+      position: relative;
+    }
+
+    .step:not(:last-child) {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 800;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+    }
+
+    .step:nth-child(even) .step-number {
+      background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+      box-shadow: 0 2px 8px rgba(219, 39, 119, 0.25);
+    }
+
+    .step-content h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 4px;
+      letter-spacing: -0.2px;
+    }
+
+    .step-content p {
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.5;
+      font-weight: 450;
+    }
+
+    .step-content code {
+      background: rgba(79, 70, 229, 0.08);
+      color: #4338ca;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      border: 1px solid rgba(79, 70, 229, 0.12);
+    }
+
+    /* ─── Install CTA ─── */
+    .install-section {
+      padding: 40px;
+      margin-bottom: 64px;
+    }
+
+    .install-section .section-label {
+      margin-bottom: 32px;
+    }
+
+    /* ─── Bottom CTA ─── */
+    .bottom-cta {
+      text-align: center;
+      padding: 48px 24px;
+      margin-bottom: 32px;
+    }
+
+    .bottom-cta p {
+      font-size: 14px;
+      color: #64748b;
+      margin-top: 16px;
+      font-weight: 500;
+    }
+
+    /* ─── Footer ─── */
+    .footer {
+      text-align: center;
+      padding: 32px 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .footer p {
+      font-size: 12px;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    .footer .version {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #a5b4fc;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .footer .version::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+    }
+
+    /* ─── Scroll Fade-in ─── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 56px 0 36px;
+      }
+
+      .dna-helix-hero {
+        height: 88px;
+        width: 36px;
+        margin-bottom: 22px;
+      }
+
+      .dna-rung::before,
+      .dna-rung::after {
+        width: 6px;
+        height: 6px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .feature-card {
+        padding: 22px 20px;
+      }
+
+      .btn-cta {
+        padding: 14px 28px;
+        font-size: 15px;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .transition-banner {
+        padding: 22px 20px;
+        margin-bottom: 48px;
+      }
+
+      .install-section {
+        padding: 28px 20px;
+      }
+
+      section {
+        margin-bottom: 48px;
+      }
+    }
+
+    @media (min-width: 769px) and (max-width: 1023px) {
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-wrapper">
+
+    <!-- ═══════════ HERO ═══════════ -->
+    <section class="hero">
+      <div class="dna-helix-hero" aria-hidden="true">
+        <div class="dna-rung"></div>
+        <div class="dna-rung"></div>
+        <div class="dna-rung"></div>
+        <div class="dna-rung"></div>
+        <div class="dna-rung"></div>
+        <div class="dna-rung"></div>
+        <div class="dna-rung"></div>
+        <div class="dna-rung"></div>
+        <div class="dna-rung"></div>
+        <div class="dna-rung"></div>
+        <div class="dna-rung"></div>
+        <div class="dna-rung"></div>
+      </div>
+
+      <h1 class="hero-title">Form Genome</h1>
+      <p class="hero-tagline">AI-Powered PDF Form Analyzer</p>
+      <p class="hero-subtitle">
+        Now available as a
+        <span class="chrome-badge">
+          <svg class="chrome-icon" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="#4f46e5" stroke-width="1.5"/>
+            <circle cx="12" cy="12" r="4" fill="#4f46e5"/>
+            <line x1="12" y1="2" x2="12" y2="8" stroke="#4f46e5" stroke-width="1.5"/>
+            <line x1="3.5" y1="17" x2="8.5" y2="14" stroke="#4f46e5" stroke-width="1.5"/>
+            <line x1="20.5" y1="17" x2="15.5" y2="14" stroke="#4f46e5" stroke-width="1.5"/>
+          </svg>
+          Chrome Extension
+        </span>
+      </p>
+
+      <a href="https://github.com/jnimbles03/formgenome/releases/latest" class="btn-cta" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download for Chrome
+      </a>
+    </section>
+
+    <!-- ═══════════ TRANSITION BANNER ═══════════ -->
+    <div class="glass transition-banner fade-up">
+      <p>
+        <strong>Form Genome has evolved.</strong>
+        What used to be a web app is now a Chrome extension for a faster, more seamless experience.
+        Install it once and analyze PDF forms from any webpage &mdash; no more switching tabs.
+      </p>
+    </div>
+
+    <!-- ═══════════ FEATURES ═══════════ -->
+    <section class="fade-up">
+      <div class="section-label">
+        <span class="accent-dot"></span>
+        <h2>What it does</h2>
+        <span class="accent-dot"></span>
+      </div>
+
+      <div class="features-grid">
+        <div class="glass feature-card">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <h3>PDF Detection</h3>
+          <p>Automatically finds PDF links on any page you visit. No manual searching required.</p>
+        </div>
+
+        <div class="glass feature-card">
+          <div class="feature-icon pink">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <h3>AI Analysis</h3>
+          <p>Instant complexity scoring, field counts, entity detection, and action type classification.</p>
+        </div>
+
+        <div class="glass feature-card">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3>Team Dashboard</h3>
+          <p>Collaborative view of all team-analyzed forms with filtering and CSV export.</p>
+        </div>
+
+        <div class="glass feature-card">
+          <div class="feature-icon pink">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><path d="M6 10h4M14 10h4M6 13h3"/></svg>
+          </div>
+          <h3>Batch Processing</h3>
+          <p>Analyze multiple PDFs at once with real-time progress tracking.</p>
+        </div>
+
+        <div class="glass feature-card">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <h3>Smart Filtering</h3>
+          <p>Auto-detect and filter out guides, disclosures, and marketing docs.</p>
+        </div>
+
+        <div class="glass feature-card">
+          <div class="feature-icon pink">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/><line x1="11" y1="8" x2="11" y2="14"/></svg>
+          </div>
+          <h3>Deep Scan</h3>
+          <p>Scan neighboring pages to discover more PDFs across multi-page listings.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ INSTALLATION ═══════════ -->
+    <section class="install-section glass fade-up">
+      <div class="section-label">
+        <span class="accent-dot"></span>
+        <h2>Install in 5 minutes</h2>
+        <span class="accent-dot"></span>
+      </div>
+
+      <div class="steps-container">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Download the extension</h3>
+            <p>Grab the latest <code>.zip</code> from the <a href="https://github.com/jnimbles03/formgenome/releases/latest" target="_blank" rel="noopener" style="color:#4338ca;font-weight:600;text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s" onmouseover="this.style.borderBottomColor='#4338ca'" onmouseout="this.style.borderBottomColor='transparent'">GitHub Releases</a> page.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Unzip the file</h3>
+            <p>Extract the ZIP &mdash; you should see a folder called <code>chrome-extension</code>.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Open Chrome Extensions</h3>
+            <p>Navigate to <code>chrome://extensions</code> and toggle on <strong>Developer mode</strong> in the top-right corner.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3>Load the extension</h3>
+            <p>Click <strong>"Load unpacked"</strong> and select the extracted <code>chrome-extension</code> folder.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">5</div>
+          <div class="step-content">
+            <h3>Pin &amp; go</h3>
+            <p>Click the puzzle icon in Chrome's toolbar and pin Form Genome. You're all set!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ BOTTOM CTA ═══════════ -->
+    <section class="bottom-cta fade-up">
+      <a href="https://github.com/jnimbles03/formgenome/releases/latest" class="btn-cta" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download for Chrome
+      </a>
+      <p>Works with Chrome 109+ &middot; Also available for Firefox</p>
+    </section>
+
+    <!-- ═══════════ FOOTER ═══════════ -->
+    <footer class="footer">
+      <p>Built for internal use at DocuSign</p>
+      <p class="version">v2.0.0</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // Intersection Observer for scroll-reveal animations
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    document.querySelectorAll('.fade-up').forEach((el) => observer.observe(el));
+  </script>
+</body>
+</html>

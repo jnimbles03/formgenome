@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team Form Genome Dashboard</title>
+  <link rel="stylesheet" href="team-dashboard.css">
+</head>
+
+<body>
+  <div class="dashboard">
+    <div class="header">
+      <h1>Team Form Genome Dashboard</h1>
+      <div class="header-actions">
+        <div id="bulkActions" class="bulk-actions" style="display: none;">
+          <span id="selectedCountDisplay" class="selected-count">0 selected</span>
+          <button id="bulkReanalyzeBtn" class="btn-reanalyze">Re-analyze</button>
+          <button id="bulkDeleteBtn" class="btn-delete">Delete</button>
+        </div>
+        <button id="viewMyForms">My Forms Only</button>
+        <button id="refreshDashboard">Refresh</button>
+        <button id="exportAllCSV">Export CSV</button>
+      </div>
+    </div>
+
+    <div class="filters">
+      <input type="text" id="searchInput" placeholder="Search forms by name, entity, or URL...">
+      <select id="filterSelect">
+        <option value="all">All Forms</option>
+        <option value="high-complexity">High Complexity</option>
+        <option value="signatures">Signatures Required</option>
+        <option value="notary">Notary Required</option>
+        <option value="attachments">Attachments Required</option>
+        <option value="payment">Payment Required</option>
+      </select>
+      <span id="formCount" class="form-count">0 forms</span>
+    </div>
+
+    <div class="table-container">
+      <div id="loadingState" class="loading">Loading team forms...</div>
+      <div id="emptyState" class="empty" style="display: none;">No forms found</div>
+      <table id="formsTable" style="display: none;">
+        <thead>
+          <tr id="tableHeaderRow"></tr>
+        </thead>
+        <tbody id="formsTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="../team-dashboard.js"></script>
+</body>
+
+</html>

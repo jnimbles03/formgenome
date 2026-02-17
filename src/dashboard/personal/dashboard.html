@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Genome Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+  <div class="dashboard">
+    <header class="dashboard-header">
+      <div class="header-content">
+        <div class="logo-wrapper">
+          <div class="dna-helix">
+            <div class="dna-rung"></div>
+            <div class="dna-rung"></div>
+            <div class="dna-rung"></div>
+            <div class="dna-rung"></div>
+            <div class="dna-rung"></div>
+            <div class="dna-rung"></div>
+            <div class="dna-rung"></div>
+            <div class="dna-rung"></div>
+            <div class="dna-rung"></div>
+            <div class="dna-rung"></div>
+          </div>
+          <div class="text-content">
+            <h1>Form Genome</h1>
+            <p class="subtitle">All analyzed forms across all sessions</p>
+          </div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="refreshDashboard" class="btn-secondary">Refresh</button>
+        <button id="exportAllCSV" class="btn-primary">Export All CSV</button>
+        <button id="clearAllData" class="btn-danger">Clear All Data</button>
+      </div>
+    </header>
+
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card glass-panel">
+        <div class="stat-value" id="totalForms">0</div>
+        <div class="stat-label">Total Forms Analyzed</div>
+      </div>
+      <div class="stat-card glass-panel">
+        <div class="stat-value" id="avgComplexity">0</div>
+        <div class="stat-label">Average Complexity</div>
+      </div>
+      <div class="stat-card glass-panel">
+        <div class="stat-value" id="uniqueEntities">0</div>
+        <div class="stat-label">Unique Entities</div>
+      </div>
+      <div class="stat-card glass-panel">
+        <div class="stat-value" id="lastAnalyzed">Never</div>
+        <div class="stat-label">Last Analyzed</div>
+      </div>
+    </div>
+
+    <div class="filters-section glass-panel">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search forms by name, entity, or URL...">
+      </div>
+      <div class="filter-pills">
+        <button class="filter-pill active" data-filter="all">All Forms</button>
+        <button class="filter-pill" data-filter="high-complexity">High Complexity</button>
+        <button class="filter-pill" data-filter="signatures">Signatures Required</button>
+        <button class="filter-pill" data-filter="notary">Notary Required</button>
+        <button class="filter-pill" data-filter="attachments">Attachments Required</button>
+        <button class="filter-pill" data-filter="payment">Payment Required</button>
+      </div>
+      <div class="sort-controls">
+        <label>Sort by:</label>
+        <select id="sortSelect">
+          <option value="recent">Most Recent</option>
+          <option value="complexity-high">Complexity (High to Low)</option>
+          <option value="complexity-low">Complexity (Low to High)</option>
+          <option value="name">Form Name (A-Z)</option>
+          <option value="entity">Entity Name (A-Z)</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="bulkActions" class="bulk-actions hidden">
+      <div class="bulk-info">
+        <span id="bulkSelectedCount">0</span> form(s) selected
+      </div>
+      <div class="bulk-buttons">
+        <button id="exportSelectedCSV" class="btn-primary btn-sm">Export Selected CSV</button>
+        <button id="selectNone" class="btn-secondary btn-sm">Clear Selection</button>
+      </div>
+    </div>
+
+    <div class="forms-container glass-panel">
+      <div class="table-container">
+        <table id="formsTable" style="display: none;">
+          <thead>
+            <tr id="tableHeaderRow"></tr>
+          </thead>
+          <tbody id="formsTableBody"></tbody>
+        </table>
+
+        <div id="emptyState" class="empty-state hidden">
+          <div class="empty-icon">No data</div>
+          <h2>No Forms Analyzed Yet</h2>
+          <p>Start analyzing PDFs with the extension to see them here!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../dashboard.js"></script>
+</body>
+
+</html>
