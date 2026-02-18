@@ -34,5 +34,3 @@ The landing page at [genome.meyerinterests.com](https://genome.meyerinterests.co
 
 ---
 
-**Version:** 2.0.0
-**Built for internal use at DocuSign**
