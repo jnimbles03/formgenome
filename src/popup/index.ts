@@ -18,9 +18,35 @@ let currentPdfs: PdfLink[] = [];
 const analysisCache = new Map<string, CachedAnalysis>();
 
 /**
+ * Injects the content script into the active tab on-demand.
+ * Uses activeTab + scripting permissions (no <all_urls> required).
+ * Safe to call multiple times — re-injection is harmless.
+ */
+async function injectContentScript(tabId: number): Promise<boolean> {
+  try {
+    await chrome.scripting.executeScript({
+      target: { tabId },
+      files: ['content.js'],
+    });
+    return true;
+  } catch (error) {
+    log.warn('Could not inject content script:', error);
+    return false;
+  }
+}
+
+/**
  * Scans for PDFs with retry mechanism.
+ * Injects the content script on-demand before communicating.
  */
 async function scanForPdfs(tabId: number, retries = 3, delay = 100): Promise<void> {
+  // Inject content script first (activeTab grants permission when popup opens)
+  const injected = await injectContentScript(tabId);
+  if (!injected) {
+    showNoPdf();
+    return;
+  }
+
   for (let i = 0; i < retries; i++) {
     try {
       const response = await chrome.tabs.sendMessage(tabId, { type: 'SCAN_FOR_PDFS' });

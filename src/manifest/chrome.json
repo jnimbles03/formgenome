@@ -2,13 +2,6 @@
   "host_permissions": [
     "https://form-genome-api-nxqo233ggq-uc.a.run.app/*"
   ],
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "run_at": "document_idle"
-    }
-  ],
   "background": {
     "service_worker": "background.js"
   }
