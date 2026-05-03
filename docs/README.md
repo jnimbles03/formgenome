@@ -1,6 +1,6 @@
 # Form Genome — landing page
 
-Static landing page for [Form Genome](https://github.com/jnimbles03/formgenome) — the AI-powered PDF form analyzer Chrome extension.
+Static landing page for [Form Genome PDF Analyzer](https://chromewebstore.google.com/detail/nldiinpemmdlllpofiohjieoocchfdji) — the AI-powered PDF form analyzer Chrome extension. Source at [jnimbles03/formgenome](https://github.com/jnimbles03/formgenome).
 
 The page is a single self-contained `index.html` with a WebGL noise-shader background that responds to cursor position. No build step.
 

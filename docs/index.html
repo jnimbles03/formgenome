@@ -341,7 +341,7 @@
 <div class="stage">
   <header class="topbar">
     <div class="mark"><span class="glyph"></span>Form Genome</div>
-    <a id="chrome-link" href="#" target="_blank" rel="noopener">Download extension ↗</a>
+    <a id="chrome-link" href="#" target="_blank" rel="noopener">Add to Chrome ↗</a>
   </header>
 
   <main class="center">
@@ -350,11 +350,11 @@
 
     <a class="cta-primary" id="cta-download" href="#" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-        <polyline points="7 10 12 15 17 10"/>
-        <line x1="12" y1="15" x2="12" y2="3"/>
+        <circle cx="12" cy="12" r="9.5"/>
+        <circle cx="12" cy="12" r="3.5"/>
+        <path d="M12 8.5h8.6M8.4 10.6 4.2 17.4M15.6 10.6l-3.6 6.9"/>
       </svg>
-      Download for Chrome
+      Add to Chrome
     </a>
 
     <div class="cta-meta">
@@ -406,12 +406,12 @@
 
         <div class="rule"></div>
 
-        <h3>The Chrome extension <span style="color: var(--ink-faint); font-weight: 400;">v2.0.0</span></h3>
+        <h3>Form Genome PDF Analyzer <span style="color: var(--ink-faint); font-weight: 400;">v2.0.0</span></h3>
         <p>
-          For day-to-day work, the extension is the better surface. It auto-detects PDF links on any page you visit, scores complexity, fields, entities, and action types in place, and queues batches across multi-page listings. Smart filtering hides guides and disclosures so you only see real forms.
+          The extension auto-detects PDF links on any page you visit, scores complexity, fields, entities, and action types in place, and queues batches across multi-page listings. Smart filtering hides guides and disclosures so you only see real forms.
         </p>
         <p>
-          Currently distributed via GitHub releases — download the zip, unzip, then load the <code>chrome-extension</code> folder via <code>chrome://extensions</code> with Developer mode on. Chrome Web Store listing in review.
+          One click to install from the Chrome Web Store — no developer mode, no zip files. Chrome handles updates automatically.
         </p>
         <p>
           Source: <a href="https://github.com/jnimbles03/formgenome" target="_blank" rel="noopener" style="color: var(--ink); border-bottom: 1px solid var(--rule);">github.com/jnimbles03/formgenome</a>
@@ -526,9 +526,7 @@ void main() {
   var CONFIG = {
     analyzeEndpoint: "/api/analyze",
     statusEndpoint:  "/api/jobs",
-    // Extension distribution — currently GitHub releases (load-unpacked).
-    // Swap to the Chrome Web Store URL once form-genome-chrome-store.zip is published.
-    chromeStoreUrl:  "https://github.com/jnimbles03/formgenome/releases/latest",
+    chromeStoreUrl:  "https://chromewebstore.google.com/detail/nldiinpemmdlllpofiohjieoocchfdji",
     pollIntervalMs:  4000,
     pollTimeoutMs:   15 * 60 * 1000,
   };
